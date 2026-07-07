@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub de Calculadoras - Arquitetura de Gente</title>
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=I804bX5cKQk4K3nkmIJXIpBW3Yw5wsMFxtH9dwW__YokiS8nCPSMm86KmnLlhJ1Z7lHavzrZkQIA3ET37CDlYelFQraOsOKNmjwCEbf6q9r3LOWfydlxzUTCtq8ha696jDD7siD-SxNW4c-7QeAKwdKqBoNQeA_t4oPN6XLbg7-zPpn2Q1d7gs2zLaHFYiARH-r0rGMji8H1BHNgphL80W8jAtNYtVY5oNp3fayJK4g9xN63gi2aEIR7rUB_gvz19vDRchlyhmqULxs1mS9nANcjVbE3h0czkCMMRoPWOgcDSsZNDv0wO9iiRpiSlx0RNoGhP6g625TPEDPn4YFgKSrFVKvk-FwIRtRg-KHMZmk" charset="UTF-8"></script><style>
+        :root {
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
+            --orange-accent: #ff6b35;
+            --red-accent: #e63946;
+            --text-light: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --border-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 2px solid var(--orange-accent);
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            margin-bottom: 15px;
+        }
+
+        .logo-svg {
+            width: 80px;
+            height: 80px;
+            fill: var(--orange-accent);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, var(--orange-accent), var(--red-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border-left: 6px solid var(--border-color);
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card.orange-pilar {
+            border-left-color: var(--orange-accent);
+        }
+
+        .card.red-pilar {
+            border-left-color: var(--red-accent);
+        }
+
+        .card.global-pilar {
+            border-left-color: #ffffff;
+            background-color: #1a1a1a;
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card .badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .card.orange-pilar .badge {
+            background-color: rgba(255, 107, 53, 0.2);
+            color: var(--orange-accent);
+        }
+
+        .card.red-pilar .badge {
+            background-color: rgba(230, 57, 70, 0.2);
+            color: var(--red-accent);
+        }
+
+        .card.global-pilar .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .card p.description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            height: 45px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--orange-accent);
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .card.orange-pilar .btn-calc {
+            background-color: var(--orange-accent);
+            color: var(--bg-dark);
+        }
+
+        .card.orange-pilar .btn-calc:hover {
+            background-color: #e55a23;
+        }
+
+        .card.red-pilar .btn-calc {
+            background-color: var(--red-accent);
+            color: white;
+        }
+
+        .card.red-pilar .btn-calc:hover {
+            background-color: #b81d24;
+        }
+
+        .card.global-pilar .btn-calc {
+            background-color: #ffffff;
+            color: var(--bg-dark);
+        }
+
+        .card.global-pilar .btn-calc:hover {
+            background-color: #e0e0e0;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1a1a1a;
+            border-radius: 6px;
+            border: 1px dashed #444;
+            text-align: center;
+        }
+
+        .result-box span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .result-box div {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .card.orange-pilar .result-box div {
+            color: var(--orange-accent);
+        }
+
+        .card.red-pilar .result-box div {
+            color: var(--red-accent);
+        }
+
+        .card.global-pilar .result-box div {
+            color: #ffffff;
+        }
+
+        .sync-banner {
+            grid-column: 1 / -1;
+            background-color: rgba(255, 107, 53, 0.1);
+            border: 1px solid var(--orange-accent);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--orange-accent);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #222;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 24 24">
+                <path d="M12,3L2,12H5V20H19V12H22L12,3M12,7.7C13.4,7.7 14.5,8.9 14.5,10.3C14.5,11.7 13.4,12.8 12,12.8C10.6,12.8 9.5,11.7 9.5,10.3C9.5,8.9 10.6,7.7 12,7.7M12,14.2C14.3,14.2 17.5,15.3 17.5,16.8V18H6.5V16.8C6.5,15.3 9.7,14.2 12,14.2Z"/>
+            </svg>
+        </div>
+        <h1>Arquitetura de Gente</h1>
+        <p>Sensores Estruturais Organizacionais</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="sync-banner">
+            💡 Dica de Carga: Defina o Headcount Centralizado abaixo para sincronizar automaticamente as calculadoras!
+        </div>
+
+        <!-- HEADCOUNT CENTRAL -->
+        <div class="card global-pilar">
+            <h2>Headcount Centralizado <span class="badge">Estrutura</span></h2>
+            <p class="description">Defina o número total de colaboradores ativos para alimentar os sensores de forma preditiva.</p>
+            <div class="form-group">
+                <label for="global-headcount">Headcount Atual da Organização</label>
+                <input type="number" id="global-headcount" value="100" oninput="sincronizarHeadcount(this.value)">
+            </div>
+            <div class="result-box">
+                <span>Status da Planta</span>
+                <div id="hc-status" style="font-size: 1.2rem; font-weight: 600;">Planta de 100 Colaboradores Ativos</div>
+            </div>
+        </div>
+
+        <!-- 1. ABSENTEÍSMO -->
+        <div class="card orange-pilar">
+            <h2>Absenteísmo <span class="badge">Pág 19</span></h2>
+            <p class="description">Mede o volume de ausências e atrasos em relação ao tempo total previsto de trabalho.</p>
+            <div class="form-group">
+                <label for="abs-horas">Horas de Ausência / Atrasos</label>
+                <input type="number" id="abs-horas" placeholder="Ex: 8">
+            </div>
+            <div class="form-group">
+                <label for="abs-previstas">Horas Previstas no Mês (Total Equipe)</label>
+                <input type="number" id="abs-previstas" placeholder="Preenchimento automático" value="16800">
+            </div>
+            <button class="btn-calc" onclick="calcularAbsenteismo()">Calcular</button>
+            <div class="result-box">
+                <span>Taxa de Absenteísmo</span>
+                <div id="abs-result">0%</div>
+            </div>
+        </div>
+
+        <!-- 2. TURNOVER -->
+        <div class="card red-pilar">
+            <h2>Turnover <span class="badge">Pág 20</span></h2>
+            <p class="description">Mede a taxa de entrada e saída, indicando a saúde da retenção de talentos.</p>
+            <div class="form-group">
+                <label for="turn-entradas">Número de Entradas</label>
+                <input type="number" id="turn-entradas" placeholder="Ex: 5">
+            </div>
+            <div class="form-group">
+                <label for="turn-saidas">Número de Saídas</label>
+                <input type="number" id="turn-saidas" placeholder="Ex: 4">
+            </div>
+            <div class="form-group">
+                <label for="turn-total">Nº Total de Funcionários (HC)</label>
+                <input type="number" id="turn-total" value="100">
+            </div>
+            <button class="btn-calc" onclick="calcularTurnover()">Calcular</button>
+            <div class="result-box">
+                <span>Taxa de Turnover</span>
+                <div id="turn-result">0%</div>
+            </div>
+        </div>
+
+        <!-- 3. SLA DE VAGAS -->
+        <div class="card orange-pilar">
+            <h2>SLA de Vagas <span class="badge">Pág 22</span></h2>
+            <p class="description">Mede o tempo médio em dias para fechar as vagas encerradas no período.</p>
+            <div class="form-group">
+                <label for="sla-dias">Soma dos Dias de Fechamento</label>
+                <input type="number" id="sla-dias" placeholder="Ex: 70 (Vaga A: 25 + Vaga B: 45)">
+            </div>
+            <div class="form-group">
+                <label for="sla-vagas">Total de Vagas Encerradas</label>
+                <input type="number" id="sla-vagas" placeholder="Ex: 2">
+            </div>
+            <button class="btn-calc" onclick="calcularSLA()">Calcular</button>
+            <div class="result-box">
+                <span>SLA Médio</span>
+                <div id="sla-result">0 dias</div>
+            </div>
+        </div>
+
+        <!-- 4. HORAS EXTRAS -->
+        <div class="card red-pilar">
+            <h2>Horas Extras <span class="badge">Pág 23</span></h2>
+            <p class="description">Identifica sobrecarga na equipe ou falhas em processos operacionais.</p>
+            <div class="form-group">
+                <label for="he-extras">Total de Horas Extras</label>
+                <input type="number" id="he-extras" placeholder="Ex: 120">
+            </div>
+            <div class="form-group">
+                <label for="he-regulares">Total de Horas Regulares (HC × 168h)</label>
+                <input type="number" id="he-regulares" value="16800">
+            </div>
+            <button class="btn-calc" onclick="calcularHorasExtras()">Calcular</button>
+            <div class="result-box">
+                <span>Índice de Hora Extra</span>
+                <div id="he-result">0%</div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 LD Local & Arquitetura de Gente. Ferramentas práticas para um RH Data-Driven e Inquestionável.</p>
+    </footer>
+
+    <script>
+        function sincronizarHeadcount(valor) {
+            const hc = parseFloat(valor) || 0;
+            document.getElementById('turn-total').value = hc;
+            const horasContratuaisEstimadas = hc * 168;
+            document.getElementById('abs-previstas').value = horasContratuaisEstimadas;
+            document.getElementById('he-regulares').value = horasContratuaisEstimadas;
+            
+            if(hc > 0) {
+                document.getElementById('hc-status').innerText = "Planta de " + hc + " Colaboradores Ativos";
+            } else {
+                document.getElementById('hc-status').innerText = "Insira um Headcount Válido";
+            }
+        }
+
+        function calcularAbsenteismo() {
+            const horasAusencia = parseFloat(document.getElementById('abs-horas').value) || 0;
+            const horasPrevistas = parseFloat(document.getElementById('abs-previstas').value) || 0;
+            if (horasPrevistas === 0) {
+                document.getElementById('abs-result').innerText = 'Erro';
+                return;
+            }
+            const resultado = (horasAusencia / horasPrevistas) * 100;
+            document.getElementById('abs-result').innerText = resultado.toFixed(2) + '%';
+        }
+
+        function calcularTurnover() {
+            const entradas = parseFloat(document.getElementById('turn-entradas').value) || 0;
+            const saidas = parseFloat(document.getElementById('turn-saidas').value) || 0;
+            const total = parseFloat(document.getElementById('turn-total').value) || 0;
+            if (total === 0) {
+                document.getElementById('turn-result').innerText = 'Erro';
+                return;
+            }
+            const resultado = ((entradas + saidas) / 2) / total * 100;
+            document.getElementById('turn-result').innerText = resultado.toFixed(2) + '%';
+        }
+
+        function calcularSLA() {
+            const dias = parseFloat(document.getElementById('sla-dias').value) || 0;
+            const vagas = parseFloat(document.getElementById('sla-vagas').value) || 0;
+            if (vagas === 0) {
+                document.getElementById('sla-result').innerText = 'Erro';
+                return;
+            }
+            const resultado = dias / vagas;
+            document.getElementById('sla-result').innerText = resultado.toFixed(1) + ' dias';
+        }
+
+        function calcularHorasExtras() {
+            const extras = parseFloat(document.getElementById('he-extras').value) || 0;
+            const regulares = parseFloat(document.getElementById('he-regulares').value) || 0;
+            if (regulares === 0) {
+                document.getElementById('he-result').innerText = 'Erro';
+                return;
+            }
+            const resultado = (extras / regulares) * 100;
+            document.getElementById('he-result').innerText = resultado.toFixed(2) + '%';
+        }
+    </script>
+</body>
+</html>
